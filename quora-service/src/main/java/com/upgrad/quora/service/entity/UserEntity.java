@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "USERS", schema = "quora")
+@Table(name = "USERS",schema="public")
 @NamedQueries({
         @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email")
 })
@@ -48,6 +48,7 @@ public class UserEntity implements Serializable {
     private String email;
 
     @Column(name = "PASSWORD")
+    @NotNull
     private String password;
 
     @Column(name = "SALT")

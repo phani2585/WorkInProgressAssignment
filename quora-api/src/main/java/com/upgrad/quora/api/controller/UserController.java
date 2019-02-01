@@ -35,6 +35,8 @@ public class UserController {
         userEntity.setSalt("1234abc");
         userEntity.setCountry(signupUserRequest.getCountry());
         userEntity.setDob(signupUserRequest.getDob());
+        userEntity.setUserName(signupUserRequest.getUserName());
+        userEntity.setAboutMe(signupUserRequest.getAboutMe());
 
 
         final UserEntity createdUserEntity = signupBusinessService.signup(userEntity);
