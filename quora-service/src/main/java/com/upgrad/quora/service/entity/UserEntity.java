@@ -13,9 +13,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "USERS", schema = "quora")
-/*@NamedQueries({
+@NamedQueries({
         @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email")
-})*/
+})
 public class UserEntity implements Serializable {
 
     @Id
