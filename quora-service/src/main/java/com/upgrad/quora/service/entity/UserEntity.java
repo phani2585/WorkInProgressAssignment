@@ -66,7 +66,7 @@ public class UserEntity implements Serializable {
 
     @Column(name = "DOB")
     @Size(max = 30)
-    private Date dob;
+    private String dob;
 
     @Column(name = "ROLE")
     @Size(max = 30)
@@ -156,11 +156,11 @@ public class UserEntity implements Serializable {
         this.aboutMe = aboutMe;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 
