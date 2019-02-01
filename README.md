@@ -7,10 +7,13 @@ UserController
 1. signup - "/user/signup"
 2. signin - "/user/signin"
 3. signout - "/user/signout"
+
 CommonController
 1. userProfile - "/userprofile/{userId}"
+
 AdminController
 1. userDelete - "/admin/user/{userId}"
+
 -----------------------------------------------
 REST API endpoints - 2
 -----------------------------------------------
