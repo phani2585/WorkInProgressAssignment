@@ -14,7 +14,8 @@ import java.util.Date;
 @Entity
 @Table(name = "users")
 @NamedQueries({
-        @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email")
+        @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email"),
+        @NamedQuery(name = "userByUserName", query = "select u from UserEntity u where u.userName = :userName")
 })
 public class UserEntity implements Serializable {
 
@@ -27,17 +28,17 @@ public class UserEntity implements Serializable {
     @Size(max = 200)
     private String uuid;
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FIRSTNAME")
     @NotNull
     @Size(max = 30)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "LASTNAME")
     @NotNull
     @Size(max = 30)
     private String lastName;
 
-    @Column(name = "USER_NAME")
+    @Column(name = "USERNAME")
     @NotNull
     @Size(max = 30)
     private String userName;
@@ -61,7 +62,7 @@ public class UserEntity implements Serializable {
     @Size(max = 30)
     private String country;
 
-    @Column(name = "ABOUT_ME")
+    @Column(name = "ABOUTME")
     @Size(max = 50)
     private String aboutMe;
 
@@ -73,7 +74,7 @@ public class UserEntity implements Serializable {
     @Size(max = 30)
     private String role;
 
-    @Column(name = "CONTACT_NUMBER")
+    @Column(name = "CONTACTNUMBER")
     @Size(max = 30)
     private String contactNumber;
 
