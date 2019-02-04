@@ -39,7 +39,7 @@ public class SigninBusinessService {
             userAuthToken.setUuid(userEntity.getUuid());
             userDao.createAuthToken(userAuthToken);
             userDao.updateUser(userEntity);
-            userAuthToken.setLogoutAt(now);
+
 
             return userAuthToken;
         } else {
