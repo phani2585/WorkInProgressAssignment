@@ -36,6 +36,7 @@ public class SigninBusinessService {
             userAuthToken.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(), now, expiresAt));
             userAuthToken.setLoginAt(now);
             userAuthToken.setExpiresAt(expiresAt);
+            userAuthToken.setUuid(userEntity.getUuid());
             userDao.createAuthToken(userAuthToken);
             userDao.updateUser(userEntity);
             userAuthToken.setLogoutAt(now);
