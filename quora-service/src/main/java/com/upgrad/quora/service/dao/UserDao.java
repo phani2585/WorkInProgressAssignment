@@ -17,9 +17,8 @@ public class UserDao {
     private EntityManager entityManager;
 
     public UserEntity createUser(UserEntity userEntity) {
-
-            entityManager.persist(userEntity);
-            return userEntity;
+        entityManager.persist(userEntity);
+        return userEntity;
     }
 
     public UserEntity getUserByEmail(final String email) {
@@ -64,4 +63,21 @@ public UserEntity getUserByUuid(final String uuid){
     }
 
 }
+
+    public String deleteUserByUuid(String userUuid) {
+        UserEntity userEntity=getUserByUuid(userUuid);
+        String uuid=userEntity.getUuid();
+        userEntity= entityManager.createNamedQuery("deleteUserByUuid", UserEntity.class).setParameter("uuid", uuid).getSingleResult();
+        return uuid;
+    }
+
+    public UserEntity getUserByRole(final String role){
+        try {
+            return entityManager.createNamedQuery("userByRole", UserEntity.class).setParameter("role", role).getSingleResult();
+        } catch (NoResultException nre) {
+
+            return null;
+        }
+
+    }
 }
