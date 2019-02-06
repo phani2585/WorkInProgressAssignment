@@ -25,10 +25,11 @@ public class AdminController {
     public ResponseEntity<UserDeleteResponse> deleteUser(@PathVariable("userId") final String userUuid,
                                                          @RequestHeader("accessToken") final String accessToken) throws AuthorizationFailedException, UserNotFoundException {
         String [] bearerToken = accessToken.split("Bearer ");
-        final UserEntity userEntity = userAdminBusinessService.getUser(userUuid, bearerToken[1]);
-        userDeleteBusinessService.deleteUser(userUuid,accessToken);
+        UserEntity userEntity=userAdminBusinessService.getUser(userUuid, bearerToken[1]);
+        UserEntity userEntityToDelete=userAdminBusinessService.updateUserEntity(userEntity);
+        final String Uuid = userDeleteBusinessService.deleteUser(userEntityToDelete);
         UserDeleteResponse userDeleteResponse = new UserDeleteResponse()
-                .id(userEntity.getUuid())
+                .id(Uuid)
                 .status("USER SUCCESSFULLY DELETED");
         return new ResponseEntity<UserDeleteResponse>(userDeleteResponse, HttpStatus.OK);
     }
