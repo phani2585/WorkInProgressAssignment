@@ -1,5 +1,6 @@
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\SignOutRestrictedException.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\dao\QuestionDao.java
+D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\CreateAnswerBusinessService.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\SignupBusinessService.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\SignUpRestrictedException.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\CreateQuestionBusinessService.java
@@ -20,6 +21,9 @@ D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quor
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\common\GenericErrorCode.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\AnswerNotFoundException.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\UserNotFoundException.java
+D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\entity\AnswerEntity.java
+D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\dao\AnswerDao.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\UserAdminBusinessService.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\entity\QuestionEntity.java
 D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\SigninBusinessService.java
+D:\phani\upgrad\Course6\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\GetAllQuestionsBusinessService.java
