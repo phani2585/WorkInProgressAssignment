@@ -3,9 +3,9 @@ package com.upgrad.quora.api.controller;
 import com.upgrad.quora.api.model.*;
 import com.upgrad.quora.service.business.CreateAnswerBusinessService;
 import com.upgrad.quora.service.business.DeleteAnswerBusinessService;
+import com.upgrad.quora.service.business.EditAnswerContentBusinessService;
 import com.upgrad.quora.service.business.GetAllAnswersToQuestionBusinessService;
 import com.upgrad.quora.service.entity.AnswerEntity;
-import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AnswerNotFoundException;
@@ -34,6 +34,9 @@ public class AnswerController {
 
     @Autowired
     private DeleteAnswerBusinessService deleteAnswerBusinessService;
+
+    @Autowired
+    private EditAnswerContentBusinessService editAnswerContentBusinessService;
 
     @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}/answer/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerResponse> createAnswer(@PathVariable("questionId") final String questionId, @RequestHeader("accessToken") final String accessToken, final AnswerRequest answerRequest) throws AuthorizationFailedException, InvalidQuestionException {
@@ -72,12 +75,11 @@ public class AnswerController {
     @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest answerEditRequest , @PathVariable("answerId") final String answerId, @RequestHeader("accessToken") final String accessToken) throws AuthorizationFailedException, AnswerNotFoundException {
         String[] bearerToken = accessToken.split("Bearer ");
-        AnswerEntity answerEntity = editQuestionContentBusinessService.verifyUserStatus(questionId,bearerToken[1]);
-        questionEntity.setContent(questionEditRequest.getContent());
-        QuestionEntity updatedQuestionEntity = editQuestionContentBusinessService.updateQuestion(questionEntity);
-        QuestionEditResponse questionEditResponse = new QuestionEditResponse().id(updatedQuestionEntity.getUuid()).status("QUESTION EDITED");
-
-        return new ResponseEntity<QuestionEditResponse>(questionEditResponse, HttpStatus.OK);
+        final AnswerEntity answerEntity = editAnswerContentBusinessService.verifyUserStatus(answerId,bearerToken[1]);
+        answerEntity.setAns(answerEditRequest.getContent());
+        final AnswerEntity updatedAnswerEntity = editAnswerContentBusinessService.updateAnswer(answerEntity);
+        AnswerEditResponse answerEditResponse = new AnswerEditResponse().id(updatedAnswerEntity.getUuid()).status("ANSWER EDITED");
+        return new ResponseEntity<AnswerEditResponse>(answerEditResponse, HttpStatus.OK);
     }
 
     @RequestMapping(method= RequestMethod.DELETE,path="/answer/delete/{answerId}",produces= MediaType.APPLICATION_JSON_UTF8_VALUE)

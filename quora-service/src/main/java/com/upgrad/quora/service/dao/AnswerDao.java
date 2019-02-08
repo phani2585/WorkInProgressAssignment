@@ -37,6 +37,9 @@ public class AnswerDao {
             return null;
         }
     }
+    public AnswerEntity updateAnswer(final AnswerEntity answerEntity) {
+        return entityManager.merge(answerEntity);
+    }
     public String deleteAnswer(final AnswerEntity answerEntity) {
         String uuid=answerEntity.getUuid();
         entityManager.remove(answerEntity);
