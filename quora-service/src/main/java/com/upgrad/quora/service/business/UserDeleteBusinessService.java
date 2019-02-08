@@ -14,16 +14,18 @@ public class UserDeleteBusinessService {
     private UserDao userDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public String deleteUser(final UserEntity userEntity) throws AuthorizationFailedException {
-        if (userEntity.getRole().equalsIgnoreCase("ADMIN")) {
+    public String deleteUser(final UserEntity userEntity,final UserEntity signedinUserEntity) throws AuthorizationFailedException {
+        if (signedinUserEntity.getRole().equalsIgnoreCase("admin")) {
 
             return userDao.deleteUser(userEntity);
         }
         else{
             throw new AuthorizationFailedException("ATHR-003", "Unauthorized Access, Entered user is not an admin");
         }
-
-
+    }
+    @Transactional(propagation = Propagation.REQUIRED)
+    public UserEntity getUserByUuid(final String userUuid){
+        return userDao.getUserByUuid(userUuid);
     }
 }
 

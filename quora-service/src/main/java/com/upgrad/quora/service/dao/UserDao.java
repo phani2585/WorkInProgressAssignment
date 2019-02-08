@@ -66,10 +66,9 @@ public UserEntity getUserByUuid(final String uuid){
 
 }
 
-    public String deleteUser(UserEntity userEntity) {
-
+    public String deleteUser(final UserEntity userEntity) {
         String uuid=userEntity.getUuid();
-         entityManager.createNamedQuery("deleteUser", UserEntity.class).setParameter("userEntity", userEntity).getSingleResult();
+        entityManager.remove(userEntity);
         return uuid;
     }
 

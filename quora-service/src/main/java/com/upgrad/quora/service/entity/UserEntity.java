@@ -16,9 +16,9 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email"),
         @NamedQuery(name = "userByUserName", query = "select u from UserEntity u where u.userName = :userName"),
-        @NamedQuery(name="userByUuid",query="select u from UserEntity u where u.uuid =:uuid"),
-        @NamedQuery(name="deleteUserByUuid",query="delete  from UserEntity u where u.uuid=:uuid"),
-        @NamedQuery(name="userByRole",query="select u from UserEntity u where u.role=:role")
+        @NamedQuery(name ="userByUuid",query="select u from UserEntity u where u.uuid =:uuid"),
+        @NamedQuery(name ="userByRole",query="select u from UserEntity u where u.role=:role")
+
 
 })
 public class UserEntity implements Serializable {

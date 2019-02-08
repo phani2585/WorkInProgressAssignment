@@ -50,4 +50,10 @@ public class QuestionDao {
         return entityManager.merge(questionEntity);
     }
 
+    public String deleteQuestion(final QuestionEntity questionEntity) {
+        String uuid=questionEntity.getUuid();
+        entityManager.remove(questionEntity);
+        return uuid;
+    }
+
 }

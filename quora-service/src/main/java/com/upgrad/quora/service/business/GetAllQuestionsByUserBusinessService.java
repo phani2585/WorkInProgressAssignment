@@ -24,24 +24,25 @@ public class GetAllQuestionsByUserBusinessService {
     private QuestionDao questionDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserAuthTokenEntity verifyAuthToken(final String userUuid,final String accessToken) throws AuthorizationFailedException, UserNotFoundException {
-        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(accessToken);
-        if (userAuthTokenEntity == null) {
+    public void verifyAuthTokenAndUuid(final String userUuid,final String authorizationToken) throws
+            UserNotFoundException, AuthorizationFailedException {
+        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authorizationToken);
+        if (userDao.getUserByUuid(userUuid) == null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid whose question details are to be seen does not exist");
+        } else if (userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         } else if (userAuthTokenEntity.getLogoutAt() != null) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions posted by a specific user");
-        } else if (userDao.getUserByUuid(userUuid) == null) {
-            throw new UserNotFoundException("USR-001", "User with entered uuid whose question details are to be seen does not exist");
-        } else {
-            return userAuthTokenEntity;
-
         }
     }
 
-    public List<QuestionEntity> getAllQuestionsByUserId ( final UserEntity user){
-            return questionDao.getAllQuestionsByUserId(user);
-        }
-
+    public List<QuestionEntity> getAllQuestionsByUserId (final UserEntity user){
+        return questionDao.getAllQuestionsByUserId(user);
     }
+    public UserAuthTokenEntity getUserAuthTokenByUuid(final String userUuid){
+    return userDao.getUserAuthTokenByUuid(userUuid);
+    }
+}
+
 
 

@@ -29,4 +29,18 @@ public class AnswerDao {
             return null;
         }
     }
+    public AnswerEntity getAnswerByAnsUuid(final String uuid) {
+        try {
+            return entityManager.createNamedQuery("answerByAnsUuid", AnswerEntity.class).setParameter("uuid", uuid).getSingleResult();
+        } catch (NoResultException nre) {
+
+            return null;
+        }
+    }
+    public String deleteAnswer(final AnswerEntity answerEntity) {
+        String uuid=answerEntity.getUuid();
+        entityManager.remove(answerEntity);
+        return uuid;
+    }
+
 }
