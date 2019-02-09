@@ -15,17 +15,15 @@ public class AnswerDao {
 
     @PersistenceContext
     private EntityManager entityManager;
-
+    //Named queries created according to the functionality as suggested by the name of the respective methods
     public AnswerEntity createAnswer(AnswerEntity answerEntity) {
         entityManager.persist(answerEntity);
         return answerEntity;
     }
-
     public List<AnswerEntity> getAllAnswersByQuestion(final QuestionEntity questionEntity){
         try {
             return entityManager.createNamedQuery("allAnswersByQuestion", AnswerEntity.class).setParameter("questionEntity", questionEntity).getResultList();
         } catch (NoResultException nre) {
-
             return null;
         }
     }
@@ -33,7 +31,6 @@ public class AnswerDao {
         try {
             return entityManager.createNamedQuery("answerByAnsUuid", AnswerEntity.class).setParameter("uuid", uuid).getSingleResult();
         } catch (NoResultException nre) {
-
             return null;
         }
     }
@@ -45,5 +42,4 @@ public class AnswerDao {
         entityManager.remove(answerEntity);
         return uuid;
     }
-
 }

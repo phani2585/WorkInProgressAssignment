@@ -15,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class DeleteQuestionBusinessService {
 
+    //Respective Data access objects have been autowired to access the methods defined in respective Dao
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private QuestionDao questionDao;
 
+    //Checks signin status based on accessToken provided
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity verifyAuthToken(final String accessToken) throws AuthorizationFailedException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(accessToken);
@@ -33,6 +35,7 @@ public class DeleteQuestionBusinessService {
         }
     }
 
+    //Returns question based on questionId if exists
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity verifyQUuid(final String questionUuid)throws InvalidQuestionException {
         QuestionEntity questionEntity = questionDao.getQuestionByQUuid(questionUuid);
@@ -43,14 +46,12 @@ public class DeleteQuestionBusinessService {
         }
     }
 
+    //Deletes question if signed in user is an admin or question owner
     @Transactional(propagation = Propagation.REQUIRED)
     public String deleteQuestion(final QuestionEntity questionEntityToDelete, final UserEntity signedinUserEntity ) throws AuthorizationFailedException {
-
         if (signedinUserEntity.getRole().equalsIgnoreCase("admin")||(questionEntityToDelete.getUser().getUserName()==signedinUserEntity.getUserName())) {
-
             return questionDao.deleteQuestion(questionEntityToDelete);
-        }
-        else{
+        } else {
             throw new AuthorizationFailedException("ATHR-003", "Only the question owner or admin can delete the question");
         }
     }

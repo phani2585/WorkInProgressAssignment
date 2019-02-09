@@ -14,26 +14,26 @@ import java.util.List;
 
 @Service
 public class GetAllQuestionsBusinessService {
+
+    //Respective Data access objects have been autowired to access the methods defined in respective Dao
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private QuestionDao questionDao;
 
+    //Checks user signedin status based on accessToken
     @Transactional(propagation = Propagation.REQUIRED)
     public UserAuthTokenEntity verifyAuthToken(final String accessToken) throws AuthorizationFailedException{
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(accessToken);
-        if(userAuthTokenEntity == null){
+        if(userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001","User has not signed in");
-        }else if(userAuthTokenEntity.getLogoutAt()!=null) {
-            throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to get all questions");
-        }
-        return userAuthTokenEntity;
-
+        } else if (userAuthTokenEntity.getLogoutAt()!=null) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get all questions");
+        }   return userAuthTokenEntity;
     }
 
-    public List<QuestionEntity> getAllQuestions()  {
-        return questionDao.getAllQuestions();
-    }
+    //Returns all the questions created by all users
+    public List<QuestionEntity> getAllQuestions() { return questionDao.getAllQuestions(); }
 
 }

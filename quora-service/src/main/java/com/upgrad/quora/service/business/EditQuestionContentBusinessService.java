@@ -14,12 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EditQuestionContentBusinessService {
 
+    //Respective Data access objects have been autowired to access the methods defined in respective Dao
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private QuestionDao questionDao;
 
+    //Checks user signed in status, validates questionId and checks if the signedin user is the question owner
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity verifyUserStatus(final String questionId,final String accessToken) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(accessToken);
@@ -39,7 +41,7 @@ public class EditQuestionContentBusinessService {
         }
     }
 
-
+    //Updates question with the edit question response provided
     @Transactional(propagation = Propagation.REQUIRED)
     public QuestionEntity updateQuestion(final QuestionEntity updatedQuestionEntity){
         return questionDao.updateQuestion(updatedQuestionEntity);

@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 public class GetAllAnswersToQuestionBusinessService {
 
+    //Respective Data access objects have been autowired to access the methods defined in respective Dao
     @Autowired
     private UserDao userDao;
 
@@ -27,7 +28,7 @@ public class GetAllAnswersToQuestionBusinessService {
     @Autowired
     private AnswerDao answerDao;
 
-
+    //Checks user signedin status based on accessToken
     @Transactional(propagation = Propagation.REQUIRED)
     public UserAuthTokenEntity verifyAuthToken(final String accessToken) throws AuthorizationFailedException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(accessToken);
@@ -35,24 +36,22 @@ public class GetAllAnswersToQuestionBusinessService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         } else if (userAuthTokenEntity.getLogoutAt() != null) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
-        }
-        return userAuthTokenEntity;
+        }   return userAuthTokenEntity;
     }
+
+    //Returns question based on questionId if exists
     @Transactional(propagation = Propagation.REQUIRED)
-    public QuestionEntity verifyQuestionId(final String uuid)throws InvalidQuestionException {
-        QuestionEntity questionEntity= questionDao.getQuestionByQUuid(uuid);
+    public QuestionEntity verifyQuestionId(final String questionUuid)throws InvalidQuestionException {
+        QuestionEntity questionEntity= questionDao.getQuestionByQUuid(questionUuid);
         if(questionEntity == null) {
             throw new InvalidQuestionException("QUES-001","The question with entered uuid whose details are to be seen does not exist");
-        }
-        else {
+        } else {
             return questionEntity;
         }
     }
 
-        public List<AnswerEntity> getAllAnswersByQuestion(QuestionEntity questionEntity){
+    //Returns all the answers based on question
+    public List<AnswerEntity> getAllAnswersByQuestion(QuestionEntity questionEntity){ return answerDao.getAllAnswersByQuestion(questionEntity); }
 
-            return answerDao.getAllAnswersByQuestion(questionEntity);
-
-        }
-    }
+}
 

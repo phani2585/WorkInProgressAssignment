@@ -25,10 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Base64;
 import java.util.UUID;
 
+//RestController annotation specifies that this class represents a REST API(equivalent of @Controller + @ResponseBody)
 @RestController
 @RequestMapping("/")
 public class UserController {
-
+    //Required services are autowired to enable access to methods defined in respective Business services
     @Autowired
     private SignupBusinessService signupBusinessService;
 
@@ -38,10 +39,10 @@ public class UserController {
     @Autowired
     private SignoutBusinessService signoutBusinessService;
 
+    //signup method is used to create a new nonadmin user by collecting required user signup information from a signup request form
    @RequestMapping(method = RequestMethod.POST, path = "/user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
-
-        final UserEntity userEntity = new UserEntity();
+       final UserEntity userEntity = new UserEntity();
 
         userEntity.setUuid(UUID.randomUUID().toString());
         userEntity.setFirstName(signupUserRequest.getFirstName());
@@ -56,38 +57,41 @@ public class UserController {
         userEntity.setPassword(signupUserRequest.getPassword());
         userEntity.setRole("nonadmin");
 
-
         final UserEntity createdUserEntity = signupBusinessService.signup(userEntity,signupUserRequest.getUserName(),signupUserRequest.getEmailAddress());
-        SignupUserResponse userResponse = new SignupUserResponse().id(createdUserEntity.getUuid()).status("USER SUCCESSFULLY REGISTERED");
+        SignupUserResponse userResponse = new SignupUserResponse()
+                .id(createdUserEntity.getUuid())
+                .status("USER SUCCESSFULLY REGISTERED");
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
-    }
+   }
 
-        @RequestMapping(method = RequestMethod.POST, path = "/user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-        public ResponseEntity<SigninResponse> login(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
+   //login method is used to perform a Basic authorization when the user tries to signin for the first time
+   @RequestMapping(method = RequestMethod.POST, path = "/user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+        public ResponseEntity<SigninResponse> login(@RequestHeader("authentication") final String authentication) throws AuthenticationFailedException {
+          byte[] decode = Base64.getDecoder().decode(authentication.split("Basic ")[1]);
+          String decodedText = new String(decode);
+          String[] decodedArray = decodedText.split(":");
+          final UserAuthTokenEntity userAuthToken = signinBusinessService.authenticate(decodedArray[0], decodedArray[1]);
+          UserEntity user = userAuthToken.getUser();
 
+          SigninResponse signinResponse = new SigninResponse()
+                  .id(user.getUuid())
+                  .message("SIGNED IN SUCCESSFULLY");
+          HttpHeaders headers = new HttpHeaders();
+          headers.add("access-token", userAuthToken.getAccessToken());
+          return new ResponseEntity<SigninResponse>(  signinResponse, headers, HttpStatus.OK);
+   }
 
-            byte[] decode = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
-            String decodedText = new String(decode);
-            String[] decodedArray = decodedText.split(":");
+   //logout method is used to signout a signedin user from the application
+   @RequestMapping(method=RequestMethod.POST,path="/user/signout",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+   public ResponseEntity<SignoutResponse> logout(@RequestHeader("accessToken") final String accessToken)throws SignOutRestrictedException{
+       String [] bearerToken = accessToken.split("Bearer ");
+       final UserAuthTokenEntity userAuthTokenEntity=signoutBusinessService.verifyAuthToken(bearerToken[1]);
 
-            UserAuthTokenEntity userAuthToken = signinBusinessService.authenticate(decodedArray[0], decodedArray[1]);
-            UserEntity user = userAuthToken.getUser();
-
-            SigninResponse signinResponse = new SigninResponse().id(user.getUuid()).message("SIGNED IN SUCCESSFULLY");
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("access-token", userAuthToken.getAccessToken());
-            return new ResponseEntity<SigninResponse>(  signinResponse, headers, HttpStatus.OK);
-        }
-@RequestMapping(method=RequestMethod.POST,path="/user/signout",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<SignoutResponse> logout(@RequestHeader("accessToken") final String accessToken)throws SignOutRestrictedException{
-    String [] bearerToken = accessToken.split("Bearer ");
-       UserAuthTokenEntity userAuthTokenEntity=signoutBusinessService.verifyAuthToken(bearerToken[1]);
-
-
-       SignoutResponse signoutResponse=new SignoutResponse().id(userAuthTokenEntity.getUuid()).message("SIGNED OUT SUCCESSFULLY");
+       SignoutResponse signoutResponse=new SignoutResponse()
+               .id(userAuthTokenEntity.getUuid())
+               .message("SIGNED OUT SUCCESSFULLY");
        return new ResponseEntity<SignoutResponse>(signoutResponse,HttpStatus.OK);
+   }
 }
-    }
 
 

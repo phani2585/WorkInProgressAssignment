@@ -11,28 +11,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SignupBusinessService {
 
+    //Respective Data access object and passwordcryptogaphyprovider has been autowired to access the method defined in respective Dao
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private PasswordCryptographyProvider passwordCryptographyProvider;
 
+    //Creates user based on signup request form and also checks for duplicate usernames and email ids while signup
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity signup(UserEntity userEntity,String userName,String email) throws SignUpRestrictedException {
-
-       if (userDao.getUserByUserName(userName) != null) {
+        if (userDao.getUserByUserName(userName) != null) {
             throw new SignUpRestrictedException("SGR-001", "Try any other Username, this Username has already been taken");
-        }
-        else if (userDao.getUserByEmail(email) != null) {
+        } else if (userDao.getUserByEmail(email) != null) {
             throw new SignUpRestrictedException("SGR-002", "This user has already been registered, try with any other emailId");
-        }
-         else {
-
-           String[] encryptedText = passwordCryptographyProvider.encrypt(userEntity.getPassword());
-           userEntity.setSalt(encryptedText[0]);
-           userEntity.setPassword(encryptedText[1]);
-
-       return userDao.createUser(userEntity);
+        } else {
+            //Generates encrypted password and salt based on the password provided by user during signup
+            String[] encryptedText = passwordCryptographyProvider.encrypt(userEntity.getPassword());
+            userEntity.setSalt(encryptedText[0]);
+            userEntity.setPassword(encryptedText[1]);
+            return userDao.createUser(userEntity);
         }
     }
 }

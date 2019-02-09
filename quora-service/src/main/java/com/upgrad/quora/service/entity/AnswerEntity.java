@@ -34,12 +34,12 @@ public class AnswerEntity implements Serializable {
     @NotNull
     @Size(max = 255)
     private String ans;
-
+    //foreign key
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "USER_ID")
     private UserEntity user;
-
+    //foreign key
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "QUESTION_ID")

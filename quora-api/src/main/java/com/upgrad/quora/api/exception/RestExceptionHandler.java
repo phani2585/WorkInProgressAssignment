@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+//RestExceptionHandler class is used to return a specific code and message when a particular exception is thrown
 @ControllerAdvice
 public class RestExceptionHandler {
 

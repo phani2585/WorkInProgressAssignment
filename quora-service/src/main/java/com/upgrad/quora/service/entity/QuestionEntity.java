@@ -32,7 +32,7 @@ import java.time.ZonedDateTime;
         @Column(name = "UUID")
         @Size(max = 200)
         private String uuid;
-
+        //foreign key
         @ManyToOne
         @OnDelete(action = OnDeleteAction.CASCADE)
         @JoinColumn(name = "USER_ID")

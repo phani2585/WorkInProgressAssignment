@@ -15,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class DeleteAnswerBusinessService {
 
+    //Respective Data access objects have been autowired to access the methods defined in respective Dao
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private AnswerDao answerDao;
 
+    //Checks user signin status based on accessToken provided
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity verifyAuthToken(final String accessToken) throws AuthorizationFailedException {
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(accessToken);
@@ -33,6 +35,7 @@ public class DeleteAnswerBusinessService {
         }
     }
 
+    //Returns answer based on answerId if exists
     @Transactional(propagation = Propagation.REQUIRED)
     public AnswerEntity verifyAnsUuid(final String answerUuid)throws AnswerNotFoundException {
         AnswerEntity answerEntity = answerDao.getAnswerByAnsUuid(answerUuid);
@@ -43,14 +46,12 @@ public class DeleteAnswerBusinessService {
         }
     }
 
+    //Deletes answer if signed in user is an admin or answer owner
     @Transactional(propagation = Propagation.REQUIRED)
     public String deleteAnswer(final AnswerEntity answerEntityToDelete, final UserEntity signedinUserEntity ) throws AuthorizationFailedException {
-
         if (signedinUserEntity.getRole().equalsIgnoreCase("admin")||(answerEntityToDelete.getUser().getUserName()==signedinUserEntity.getUserName())) {
-
             return answerDao.deleteAnswer(answerEntityToDelete);
-        }
-        else{
+        } else {
             throw new AuthorizationFailedException("ATHR-003", "Only the answer owner or admin can delete the answer");
         }
     }

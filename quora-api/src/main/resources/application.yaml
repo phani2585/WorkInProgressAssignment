@@ -13,7 +13,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/quora
     username: postgres
     password: manager
-
   jpa:
     properties:
       hibernate:
